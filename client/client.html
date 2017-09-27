@@ -1,14 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <title>Our simple HTTP server</title>
   <link rel="stylesheet" type="text/css" href="/style.css">
-  
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
   <script type="text/babel">
+    const handleResponse = (xhr, parseResponse) =>{
+      const content = document.querySelector('#content');
+      const type = xhr.getResponseHeader('content-type');
+      
+      console.dir(type);
+      
+      //REWRITE TO SEE IF SOMETHING IS WEIRD
+      const header = document.createElement('h1');
+      const paragraph = document.createElement('p');
+      
+      
+      if(type === 'application/json') {
+        const obj = JSON.parse(xhr.response);
+        debugger;
+        
+        if(obj.name && obj.message){  
+        header.textContent = obj.name;
+        paragraph.textContent = obj.message;
+        }else if(obj.serverUsers){
+          header.textContent = "USERS";
+          paragraph.textContent = obj;
+        }
+      }
+      
+      console.dir(xhr.getResponseHeader('etag'));
+      console.dir(xhr.status);
+      
+      console.log(`Header:${header.textContent}`);
+      console.log(`Paragraph:${paragraph.textContent}`);
+      
+      content.appendChild(header);
+      content.appendChild(paragraph);
+    };
 
+    const requestUpdate = (e, userForm) =>{
+      const url = userForm.getAttribute('action');
+      const method = userForm.getAttribute('method');
+      const xhr = new XMLHttpRequest();
+      
+      xhr.open(method, url);
+      xhr.setRequestHeader('Accept','application/json');
+      
+      if(method === 'get'){
+        xhr.onload = () => handleResponse(xhr, true);
+      }else {
+        xhr.onload = () => handleResponse(xhr, false);
+      }
+      
+      xhr.send();
+      
+      e.preventDefault();
+      
+      return false;
+    }
+    
+    
+    const init = () => {
+      const userForm = document.querySelector('#userForm');
+      const getUsers = (e) => requestUpdate(e, userForm);
+      
+      userForm.addEventListener('submit', getUsers);
+    };
+
+    
+    window.onload = init;
+    
+    
   </script>
 </head>
+
 <body>
   <section id="top">
     <h3>POST Status Code Tests</h3>
@@ -16,7 +84,7 @@
       <label for="name">Name: </label>
       <input id="nameField" type="text" name="name" />
       <label for="age">Age: </label>
-      <input id="ageField" type="number" name="age" min="0" max="100" step="1"/>
+      <input id="ageField" type="number" name="age" min="0" max="100" step="1" />
       <input type="submit" value="Add User" />
     </form>
     <form id="userForm" action="/getUsers" method="get">
@@ -34,4 +102,5 @@
   <section id="content">
   </section>
 </body>
+
 </html>
