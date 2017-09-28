@@ -38,6 +38,12 @@
     const requestUpdate = (e, userForm) =>{
       const url = userForm.getAttribute('action');
       const method = userForm.getAttribute('method');
+      
+ 
+      
+      console.log(url);
+      console.log(method);
+      
       const xhr = new XMLHttpRequest();
       
       xhr.open(method, url);
@@ -62,9 +68,25 @@
       const getUsers = (e) => requestUpdate(e, userForm);
       
       const nameForm = document.querySelector('#nameForm');
+      const sendUsers = (e) => requestUpdate(e, nameForm);
       
       userForm.addEventListener('submit', getUsers);
-      //nameForm.addEventListener('submit', getUsers);
+      //nameForm.addEventListener('submit', sendUsers);
+      
+      const urlField = document.querySelector('#urlField');
+      const methodSelect = document.querySelector('#methodSelect');
+      
+      urlField.onchange = () =>{
+        userForm.setAttribute('action',urlField.options[urlField.selectedIndex].value);
+        console.log("changed URL");
+        console.log(userForm.getAttribute('action'));
+      };
+      
+      methodSelect.onchange = () =>{
+        userForm.setAttribute('method',methodSelect.options[methodSelect.selectedIndex].value);
+        console.log("changed METHOD");
+        console.log(userForm.getAttribute('method'));
+      };
     };
 
     
@@ -89,7 +111,7 @@
         <option value='/getUsers'>/getUsers</option>
         <option value='/notReal'>/notReal</option>
       </select>
-      <select id="methodSelect">
+      <select id='methodSelect'>
         <option value="get">GET</option>
         <option value="head">HEAD</option>
       </select>

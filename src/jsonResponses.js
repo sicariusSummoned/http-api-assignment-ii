@@ -6,13 +6,13 @@ let etag = crypto.createHash('sha1').update(JSON.stringify(users));
 
 let digest = etag.digest('hex');
 
-const respondJSON = (request, response, status, object) => {
+const respondJSON = (request, response, status, body) => {
   const headers = {
     'Content-Type': 'application/json',
     etag: digest,
   };
   response.writeHead(status, headers);
-  response.write(JSON.stringify(object));
+  response.write(JSON.stringify(body));
   response.end();
 };
 
@@ -35,13 +35,13 @@ const getUsers = (request, response) => {
     return respondJSONMeta(request, response, 304);
   }
 
-
+  etag = crypto.createHash('sha1').update(JSON.stringify(users));
+  digest = etag.digest('hex');
   return respondJSON(request, response, 200, responseJSON);
 };
 
 const addUser = (request, response, body) => {
   console.dir(body);
-  console.dir(request);
 
   const responseJSON = {
     name: 'INCOMPLETE FORM',
@@ -84,9 +84,8 @@ const updateUsers = (request, response, body) => {
 const getUsersMeta = (request, response) => {
   if (request.headers['if-none-match'] === digest) {
     return respondJSONMeta(request, response, 304);
-  }else{
-    return false;
   }
+  return false;
 };
 
 const notFound = (request, response) => {
@@ -99,15 +98,17 @@ const notFound = (request, response) => {
     return respondJSONMeta(request, response, 304);
   }
 
+  etag = crypto.createHash('sha1').update(JSON.stringify(users));
+  digest = etag.digest('hex');
+
   return respondJSON(request, response, 404, responseJSON);
 };
 
 const notFoundMeta = (request, response) => {
-   if (request.headers['if-none-match'] === digest) {
+  if (request.headers['if-none-match'] === digest) {
     return respondJSONMeta(request, response, 304);
-  }else{
-    return false;
   }
+  return false;
 };
 
 module.exports = {
