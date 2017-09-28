@@ -15,21 +15,24 @@
       const header = document.createElement('h1');
       const paragraph = document.createElement('p');
       
-      
-      if(type === 'application/json') {
+      if(parseResponse){
+        if(type === 'application/json') {                  
         let obj = JSON.parse(xhr.response);
         console.dir(obj);
+        
         if(obj.name && obj.message){  
-        header.textContent = obj.name;
-        paragraph.textContent = JSON.stringify(obj.message);
-        console.log("name&message")
-        }else{
+          header.textContent = obj.name;
+          paragraph.textContent = JSON.stringify(obj.message);
+          console.log("name&message");
+          }else{
           console.log("Obj doesn't have name and message");
-        }
-      }
+          }
+        } 
       
-      //console.dir(xhr.getResponseHeader('etag'));
-      //console.dir(xhr.status);
+      }
+
+      console.dir(xhr.getResponseHeader('etag'));
+      console.dir(xhr.status);
       
       
       content.innerHTML = "";
@@ -62,7 +65,37 @@
       e.preventDefault();
       
       return false;
-    }
+    };
+
+
+    const sendUser = (e, userForm, nameForm) =>{
+      const action = userForm.getAttribute('action');
+      const method = userForm.getAttribute('method');
+      const userName =document.querySelector('#nameField');
+      const userAge =document.querySelector('#ageField');
+      
+      
+      const xhr = new XMLHttpRequest();
+      
+      xhr.open(method, action);
+      
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      xhr.setRequestHeader('Accept', 'application/json');
+      
+      
+      if(method === 'get'){
+        xhr.onload = () => handleResponse(xhr, true);
+      }else {
+        xhr.onload = () => handleResponse(xhr, true);
+      }
+      
+      const formInfo = `name=${userName.value}&age=${userAge.value}`;
+      
+      xhr.send(formInfo);
+      
+      e.preventDefault();
+      return false;
+    };
     
     
     const init = () => {
@@ -70,10 +103,10 @@
       const getUsers = (e) => requestUpdate(e, userForm);
       
       const nameForm = document.querySelector('#nameForm');
-      const sendUsers = (e) => requestUpdate(e, nameForm);
+      const sendUsers = (e) => sendUser(e, nameForm);
       
       userForm.addEventListener('submit', getUsers);
-      //nameForm.addEventListener('submit', sendUsers);
+      nameForm.addEventListener('submit', sendUsers);
       
       const urlField = document.querySelector('#urlField');
       const methodSelect = document.querySelector('#methodSelect');
