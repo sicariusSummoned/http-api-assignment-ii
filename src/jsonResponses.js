@@ -84,6 +84,8 @@ const updateUsers = (request, response, body) => {
 const getUsersMeta = (request, response) => {
   if (request.headers['if-none-match'] === digest) {
     return respondJSONMeta(request, response, 304);
+  }else{
+    return false;
   }
 };
 
@@ -103,6 +105,8 @@ const notFound = (request, response) => {
 const notFoundMeta = (request, response) => {
    if (request.headers['if-none-match'] === digest) {
     return respondJSONMeta(request, response, 304);
+  }else{
+    return false;
   }
 };
 
