@@ -11,7 +11,6 @@
       const content = document.querySelector('#content');
       const type = xhr.getResponseHeader('content-type');
       
-      console.dir(type);
       
       //REWRITE TO SEE IF SOMETHING IS WEIRD
       const header = document.createElement('h1');
@@ -20,23 +19,25 @@
       
       if(type === 'application/json') {
         let obj = JSON.parse(xhr.response);
-        obj = JSON.stringify(obj);
-        
+        console.dir(obj);
         if(obj.name && obj.message){  
         header.textContent = obj.name;
         paragraph.textContent = obj.message;
+        console.log("name&message")
+        }else{
+          console.log("serverUsers");
           
-        }else if(obj.serverUsers){
+          
           header.textContent = "USERS";
-          paragraph.textContent = obj;
+          paragraph.textContent = xhr.response;
+          console.log(obj.name);
+          console.log(obj.message);
         }
       }
       
       //console.dir(xhr.getResponseHeader('etag'));
       //console.dir(xhr.status);
       
-      console.log(`Header:${header.textContent}`);
-      console.log(`Paragraph:${paragraph.textContent}`);
       
       content.innerHTML = "";
       content.appendChild(header);

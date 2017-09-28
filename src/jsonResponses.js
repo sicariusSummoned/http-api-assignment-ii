@@ -27,15 +27,14 @@ const respondJSONMeta = (request, response, status) => {
 
 const getUsers = (request, response) => {
   const responseJSON = {
-    serverUsers: users,
+    name: "Success",
+    message: users,
   };
 
   if (request.headers['if-none-match'] === digest) {
     return respondJSONMeta(request, response, 304);
   }
 
-  etag = crypto.createHash('sha1').update(JSON.stringify(users));
-  digest = etag.digest('hex');
 
 
   return respondJSON(request, response, 200, responseJSON);
