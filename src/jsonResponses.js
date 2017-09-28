@@ -27,7 +27,7 @@ const respondJSONMeta = (request, response, status) => {
 
 const getUsers = (request, response) => {
   const responseJSON = {
-    name: "Success",
+    name: 'Success',
     message: users,
   };
 
@@ -36,12 +36,12 @@ const getUsers = (request, response) => {
   }
 
 
-
   return respondJSON(request, response, 200, responseJSON);
 };
 
 const addUser = (request, response, body) => {
   console.dir(body);
+  console.dir(request);
 
   const responseJSON = {
     name: 'INCOMPLETE FORM',
@@ -50,6 +50,7 @@ const addUser = (request, response, body) => {
 
   if (!body.name || !body.age) {
     responseJSON.id = 'missingParams';
+    console.log('missingParams');
   } else {
     users[body.name] = body;
     responseJSON.name = body.name;
@@ -62,7 +63,7 @@ const addUser = (request, response, body) => {
   digest = etag.digest('hex');
 
 
-  return respondJSON(request, response, 200,responseJSON);
+  return respondJSON(request, response, 200, responseJSON);
 };
 
 const updateUsers = (request, response, body) => {

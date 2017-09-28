@@ -12,7 +12,6 @@
       const type = xhr.getResponseHeader('content-type');
       
       
-      //REWRITE TO SEE IF SOMETHING IS WEIRD
       const header = document.createElement('h1');
       const paragraph = document.createElement('p');
       
@@ -22,16 +21,8 @@
         console.dir(obj);
         if(obj.name && obj.message){  
         header.textContent = obj.name;
-        paragraph.textContent = obj.message;
+        paragraph.textContent = JSON.stringify(obj.message);
         console.log("name&message")
-        }else{
-          console.log("serverUsers");
-          
-          
-          header.textContent = "USERS";
-          paragraph.textContent = xhr.response;
-          console.log(obj.name);
-          console.log(obj.message);
         }
       }
       
@@ -70,7 +61,10 @@
       const userForm = document.querySelector('#userForm');
       const getUsers = (e) => requestUpdate(e, userForm);
       
+      const nameForm = document.querySelector('#nameForm');
+      
       userForm.addEventListener('submit', getUsers);
+      //nameForm.addEventListener('submit', getUsers);
     };
 
     
