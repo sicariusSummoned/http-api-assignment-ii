@@ -20,8 +20,9 @@ const onRequest = (request, response) => {
       case '/getUsers':
         jsonHandler.getUsers(request, response);
         break;
-
-
+      case '/notReal':
+        jsonHandler.notFound(request, response);
+        break;
       default:
         jsonHandler.notFound(request, response);
     }

@@ -19,24 +19,26 @@
       
       
       if(type === 'application/json') {
-        const obj = JSON.parse(xhr.response);
-        debugger;
+        let obj = JSON.parse(xhr.response);
+        obj = JSON.stringify(obj);
         
         if(obj.name && obj.message){  
         header.textContent = obj.name;
         paragraph.textContent = obj.message;
+          
         }else if(obj.serverUsers){
           header.textContent = "USERS";
           paragraph.textContent = obj;
         }
       }
       
-      console.dir(xhr.getResponseHeader('etag'));
-      console.dir(xhr.status);
+      //console.dir(xhr.getResponseHeader('etag'));
+      //console.dir(xhr.status);
       
       console.log(`Header:${header.textContent}`);
       console.log(`Paragraph:${paragraph.textContent}`);
       
+      content.innerHTML = "";
       content.appendChild(header);
       content.appendChild(paragraph);
     };

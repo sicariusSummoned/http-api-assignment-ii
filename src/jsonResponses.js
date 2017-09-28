@@ -34,6 +34,10 @@ const getUsers = (request, response) => {
     return respondJSONMeta(request, response, 304);
   }
 
+  etag = crypto.createHash('sha1').update(JSON.stringify(users));
+  digest = etag.digest('hex');
+
+
   return respondJSON(request, response, 200, responseJSON);
 };
 
@@ -47,7 +51,7 @@ const addUser = (request, response, body) => {
 
   if (!body.name || !body.age) {
     responseJSON.id = 'missingParams';
-  }else{
+  } else {
     users[body.name] = body;
     responseJSON.name = body.name;
     responseJSON.message = body.age;
@@ -55,7 +59,11 @@ const addUser = (request, response, body) => {
     console.dir(users);
   }
 
-  return respondJSON(request, response, 200, responseJSON);
+  etag = crypto.createHash('sha1').update(JSON.stringify(users));
+  digest = etag.digest('hex');
+
+
+  return respondJSON(request, response, 200,responseJSON);
 };
 
 const updateUsers = (request, response, body) => {
@@ -78,7 +86,7 @@ const getUsersMeta = (request, response) => {
 };
 
 const notFound = (request, response) => {
-  const responseJson = {
+  const responseJSON = {
     name: '404',
     message: 'Not Found',
     id: 'notFound',
@@ -87,7 +95,7 @@ const notFound = (request, response) => {
     return respondJSONMeta(request, response, 304);
   }
 
-  return respondJSON(request, response, 404, responseJson);
+  return respondJSON(request, response, 404, responseJSON);
 };
 
 const notFoundMeta = (request, response) => {
