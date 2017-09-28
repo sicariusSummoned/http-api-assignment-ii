@@ -81,12 +81,7 @@ const updateUsers = (request, response, body) => {
   return respondJSON(request, response, 201, updatingUser);
 };
 
-const getUsersMeta = (request, response) => {
-  if (request.headers['if-none-match'] === digest) {
-    return respondJSONMeta(request, response, 304);
-  }
-  return false;
-};
+const getUsersMeta = (request, response) => respondJSONMeta(request, response, 304);
 
 const notFound = (request, response) => {
   const responseJSON = {
@@ -104,12 +99,7 @@ const notFound = (request, response) => {
   return respondJSON(request, response, 404, responseJSON);
 };
 
-const notFoundMeta = (request, response) => {
-  if (request.headers['if-none-match'] === digest) {
-    return respondJSONMeta(request, response, 304);
-  }
-  return false;
-};
+const notFoundMeta = (request, response) => respondJSONMeta(request, response, 304);
 
 module.exports = {
   respondJSON,
